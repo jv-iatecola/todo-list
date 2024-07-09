@@ -1,15 +1,19 @@
 const inputElement = document.querySelector("input")
 const buttonElement = document.querySelector("button")
 
-let inputResponse = undefined
-const editButton = undefined
-const deleteButton = undefined
+let inputResponse = ''
+const todoList = []
 
 inputElement.addEventListener("input", (event)=>{
-   inputResponse = event.target.value
-})
-
+    inputResponse = event.target.value
+})  
+    
 buttonElement.addEventListener("click", ()=>{
+    todoList.push({
+        value: inputResponse,
+        id: Math.random()
+    })
+
     const pElement = document.createElement("p")
     pElement.textContent = inputResponse
 
