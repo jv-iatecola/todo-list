@@ -1,55 +1,70 @@
-let inputElement = document.querySelector("input")
+const inputElement = document.querySelector("input")
 const buttonElement = document.querySelector("button")
+const groupElement = document.createElement("div")
 
 let inputResponse = ''
-const todoList = []
+let todoList = []
+let indexResult = null
 
-inputElement.addEventListener("input", (event)=>{
+inputElement.addEventListener("input", (event) => {
     inputResponse = event.target.value
-})  
+})
 
-let selectedItem = null
+function editHandler(){
+    buttonElement.textContent = "Confirm"
+    inputElement.value = item.value
+    indexResult = todoList.findIndex((element) => {
+        return element.id === item.id
+    })
+}
 
-buttonElement.addEventListener("click", ()=>{
+function deleteHandler(){
+    todoList = todoList.filter((item2) => {
+        return item2.id !== item.id
+    })
+    renderDOM()
+}
 
-    if (buttonElement.textContent === "add"){
+function renderDOM() {
+    groupElement.innerHTML = ''
+
+    todoList.forEach((item) => {
         const textElement = document.createElement("p")
-        
-        // todoList.push({
-        //     value: inputResponse,
-        //     id: Math.random()   
-        // })
-            
-        textElement.textContent = inputResponse
-        textElement.id = Math.random()
+        textElement.textContent = item.value
 
         const editButton = document.createElement("button")
         editButton.textContent = "Edit"
-        
+
         const deleteButton = document.createElement("button")
         deleteButton.textContent = "Delete"
-               
-        editButton.addEventListener("click", ()=>{
-            console.log(textElement.id)
-            buttonElement.textContent = "Confirm"
-            inputElement.value = textElement.textContent
-            selectedItem = textElement.id
-        })
-        
-        deleteButton.addEventListener("click", ()=>{
-            document.body.removeChild(textElement)
-            document.body.removeChild(deleteButton)
-            document.body.removeChild(editButton)
-        })
-        
-        document.body.prepend(textElement, editButton, deleteButton)
-    }else{
-        const textElement = document.getElementById(selectedItem)
-        textElement.textContent = inputResponse
+
+
+        editButton.addEventListener("click", editHandler)
+
+        deleteButton.addEventListener("click", deleteHandler)
+
+        groupElement.append(textElement, editButton, deleteButton)
 
         buttonElement.textContent = "add"
+
+        document.body.prepend(groupElement)
+    })
+}
+
+buttonElement.addEventListener("click", () => {
+
+    if (buttonElement.textContent === "add") {
+
+        todoList.push({
+            value: inputResponse,
+            id: Math.random()
+        })
+
+        renderDOM()
+
+    } else {
+        todoList[indexResult].value = inputResponse
+
+        renderDOM()
     }
-    
-    // textElement.textContent = inputResponse
-     
 })
